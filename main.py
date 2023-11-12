@@ -42,7 +42,7 @@ def pypropep_to_dataframe(p, ox, fuel):
 
     for i, c in enumerate(positions):
         composition = p.composition[c][0:8]
-        if bool(p.composition_condensed[c]):
+        if (bool(p.composition_condensed[c])):
             composition.append(p.composition_condensed[c])
 
         df.loc[c, 'of (wt ratio)'] = p._equil_structs[0].propellant.coef[1] * ox.mw
@@ -73,6 +73,7 @@ def pypropep_to_dataframe(p, ox, fuel):
     return df
 
 
+@st.cache_data
 def ranged_sim(ox, fuel, of_arr, p_arr, p_e=1, assumption='SHIFTING'):
     # iterates through OF ratios and pressures.
     df_list = []
@@ -110,8 +111,9 @@ def ranged_sim(ox, fuel, of_arr, p_arr, p_e=1, assumption='SHIFTING'):
     return results
 
 
+@st.cache_data
 def data_filter(df, pos, var):
-    # Parameters = ['of (wt ratio)', 'p (psi)', 't (K)', 'rho (kg/m^3)', 'v (m/s)', 'Isp (s)', 'Ivac (m/s)', 'c* (m/s)', 'cf', 'sound (m/s)', 'A/At', 'cp (kJ/kg-K)', 'cv (kJ/kg-K)', 'gamma', 'mol mass (g/mol)', 
+    # Parameters = ['of (wt ratio)', 'p (psi)', 't (K)', 'rho (kg/m^3)', 'v (m/s)', 'Isp (s)', 'Ivac (m/s)', 'c* (m/s)', 'cf', 'sound (m/s)', 'A/At', 'cp (kJ/kg-K)', 'cv (kJ/kg-K)', 'gamma', 'mol mass (g/mol)',
     #           'h (kJ/kg)', 'u (kJ/kg)', 'g (kJ/kg)', 's (kJ/kg-K)', 'dV_P', 'dV_T', 'composition']
     # positions = ['chamber', 'throat', 'exit']
     # filtered = df.loc[:, [  'of (wt ratio)','p (psi)', var]]
@@ -132,6 +134,7 @@ def data_filter(df, pos, var):
     return output
 
 
+@st.cache_data
 def gen_plot(df, pos, var, plot_type='heatmap', ):
     data_filtered = data_filter(df, pos, var)
     print(df.attrs['ox'][0])
@@ -150,6 +153,7 @@ def gen_plot(df, pos, var, plot_type='heatmap', ):
     return fig, data_filtered
 
 
+@st.cache_data
 def convert_df(df):
     return df.to_csv().encode('utf-8')
 
@@ -157,8 +161,7 @@ def convert_df(df):
 ### Creates the UI
 st.header('Rocket Cow Engine Visualizer')
 st.write(
-    'Welcome to V0 of the :rainbow[Rocket Cow Engine Visualizer\u2122], enter a range of pressure and OF ratio and '
-    'this app will let you visualize the conditions throughout the engine at any given point')
+    'Welcome to V0 of the :rainbow[Rocket Cow Engine Visualizer\u2122], enter a range of pressure and OF ratio and this app will let you visualize the conditions throughout the engine at any given point')
 
 # col1, col2 = st.columns(2)
 # with col1:
@@ -204,22 +207,22 @@ with st.form('OF & Pressure form'):
 
 if state.run_button:
 
-    if state.p_min > state.p_max:
+    if (state.p_min > state.p_max):
         st.warning('Your minimum pressure is greater than your maximum pressure! Adjust and rerun.', icon="⚠️")
         st.stop()
-    if state.p_min < state.p_e:
+    if (state.p_min < state.p_e):
         st.warning(
             'Your your exit pressure exceeds your minimum pressure! Your chamber pressure must always exceed ambient pressure. Adjust and rerun.',
             icon="⚠️")
         st.stop()
-    if state.p_step > (state.p_max - state.p_min):
+    if (state.p_step > (state.p_max - state.p_min)):
         st.warning('Your pressure step size is greater than your pressure range! Adjust and rerun', icon="⚠️")
         st.stop()
 
-    if state.of_min > state.of_max:
+    if (state.of_min > state.of_max):
         st.warning('Your minimum OF ratio is greater than your maximum OF ratio! Adjust and rerun', icon="⚠️")
         st.stop()
-    if state.of_step > (state.p_max - state.p_min):
+    if (state.of_step > (state.p_max - state.p_min)):
         st.warning('Your OF ratio step size is greater than your OF ratio range! Adjust and rerun', icon="⚠️")
         st.stop()
 
@@ -262,7 +265,7 @@ if state.run_button:
             st.download_button("Press to Download", csv, "file.csv", "text/csv")
 
         # running stuff
-# data = ranged_sim(state.ox,state.fuel , list(np.arange(state.of_min, state.of_max, state.of_step)), 
+# data = ranged_sim(state.ox,state.fuel , list(np.arange(state.of_min, state.of_max, state.of_step)),
 #                   list(np.arange(state.p_min,state.p_max, state.p_step)), assumption='FROZEN')
 # figure = gen_plot(data, 'chamber', 't (K)', plot_type='surface')
 
