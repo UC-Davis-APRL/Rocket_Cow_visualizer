@@ -166,8 +166,8 @@ with st.form('OF & Pressure form'):
     # Prop input
     st.subheader("Propellants")
     col1, col2 = st.columns(2)
-    col1.selectbox('Fuel:', ['RP-1 (RPL)', 'METHANE', 'PROPANE'], key='fuel')
-    col2.selectbox('Oxidizer:',['OXYGEN (LIQUID)', 'OXYGEN (GAS)', 'NITROUS OXIDE', 'AIR (DRY AT SEA LEVEL)'], key='ox')
+    col1.selectbox('Fuel:', ['RP-1 (RPL)', 'METHANE', 'PROPANE', 'BUTANE(2,2-BISDIFLUOROAMINO)', 'ISOPROPYL ALCOHOL', 'HYDROGEN (CRYOGENIC)','ETHANOL'], key='fuel')
+    col2.selectbox('Oxidizer:',['OXYGEN (LIQUID)', 'OXYGEN (GAS)', 'NITROUS OXIDE', 'AIR (DRY AT SEA LEVEL)', 'CHLORINE', 'HYDROGEN PEROXIDE (100 PC)'], key='ox')
     
     # Pressure input
     st.divider()
@@ -257,8 +257,6 @@ if state.run_button:
 #                   list(np.arange(state.p_min,state.p_max, state.p_step)), assumption='FROZEN')
 # figure = gen_plot(data, 'chamber', 't (K)', plot_type='surface')
 
-
-
-
+#Hi
 
 # plot_chart(figure)
