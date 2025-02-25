@@ -52,8 +52,8 @@ def pypropep_to_dataframe(p, ox, fuel):
         df.loc[c, 'Ivac (m/s)']         = p._equil_structs[i].performance.Ivac
         df.loc[c, 'c* (m/s)']           = p._equil_structs[i].performance.cstar
         df.loc[c, 'cf']                 = p._equil_structs[i].performance.cf
-        df.loc[c, 'sound (m/s)']        = p._equil_structs[i].performance.ae_at
-        df.loc[c, 'A/At']               = p._equil_objs[i].properties.Vson
+        df.loc[c, 'sound (m/s)']        = p._equil_objs[i].properties.Vson
+        df.loc[c, 'A/At']               = p._equil_structs[i].performance.ae_at
         df.loc[c, 'cp (kJ/kg-K)']       = p._equil_objs[i].properties.Cp
         df.loc[c, 'cv (kJ/kg-K)']       = p._equil_objs[i].properties.Cv
         df.loc[c, 'gamma']              = p._equil_objs[i].properties.Isex
